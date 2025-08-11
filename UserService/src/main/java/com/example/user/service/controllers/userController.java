@@ -28,6 +28,18 @@ public class userController {
         return ResponseEntity.ok(user);
     }
 
+    //Fallback method for circuitBreaker
+    public ResponseEntity<User> ratingHotelFallBack(String userId, Exception e){
+        logger.info("Fallback is executed because service is down: ", e.getMessage());
+        User user = User.builder()
+                .email("dummy@gmail.com")
+                .name("Dummy")
+                .about("This user is created because some service is down")
+                .userId("123344")
+                .build();
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUSer(){
         List<User> allUser = userService.getAllUser();
